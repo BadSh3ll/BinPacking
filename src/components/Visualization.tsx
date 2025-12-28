@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { BarChart3 } from 'lucide-react';
-import type { Box } from '../types';
+import type { Box } from '../types/box';
 
 interface VisualizationProps {
   boxes: Box[];
@@ -53,7 +53,7 @@ export function Visualization({ boxes, maxBoxesToShow = 20 }: VisualizationProps
           const rectH = rect.height * scale;
 
           // Fill rectangle with color
-          ctx.fillStyle = rect.color || '#3b82f6';
+          ctx.fillStyle = '#3b82f6';
           ctx.fillRect(rectX, rectY, rectW, rectH);
 
           // Draw rectangle border

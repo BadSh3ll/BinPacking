@@ -3,7 +3,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Package, RefreshCw } from 'lucide-react';
-import type { InstanceParams } from '../types';
+import type { InstanceParams } from '../types/instance';
 
 interface InstanceParametersProps {
   params: InstanceParams;

@@ -5,11 +5,11 @@ import { AlgorithmControl } from './components/AlgorithmControl';
 import { Visualization } from './components/Visualization';
 import { MetricsStatus } from './components/MetricsStatus';
 import type {
-  InstanceParams,
   AlgorithmParams,
   SolutionMetrics,
-  Box,
 } from './types';
+import { InstanceGenerator, type InstanceParams } from './types/instance';
+import type { Box } from './types/box';
 
 function App() {
   const [instanceParams, setInstanceParams] = useState<InstanceParams>({
@@ -43,6 +43,9 @@ function App() {
   const handleGenerateInstance = () => {
     // TODO: Implement instance generation
     console.log('Generating instance with params:', instanceParams);
+    const instance = new InstanceGenerator().generate(instanceParams);
+    console.log('Generated instance:', instance);
+    // Reset solution and metrics
     setBoxes([]);
     setMetrics({
       boxesUsed: 0,
