@@ -1,20 +1,37 @@
-export class Rectangle {
+import type { GreedyElement } from "./greedy";
 
-    readonly id: number;
+export class Rectangle implements GreedyElement {
+
     readonly width: number;
     readonly height: number;
 
     // Position within the box
-    x?: number;
-    y?: number;
+    private x: number | null = null;
+    private y: number | null = null;
+    rotated: boolean = false;
+    
+    get position() {
+        return { x: this.x , y: this.y };
+    }
 
-    constructor(id: number, width: number, height: number) {
-        this.id = id;
+    setPosition(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    get area(): number {
+        return this.width * this.height;
+    }
+    
+    constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
     }
 
+
     rotate(): Rectangle {
-        return new Rectangle(this.id, this.height, this.width);
+        const rotatedRect = new Rectangle(this.height, this.width);
+        rotatedRect.rotated = !this.rotated;
+        return rotatedRect;
     }
 }

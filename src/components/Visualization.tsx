@@ -8,7 +8,7 @@ interface VisualizationProps {
   maxBoxesToShow?: number;
 }
 
-export function Visualization({ boxes, maxBoxesToShow = 20 }: VisualizationProps) {
+export function Visualization({ boxes, maxBoxesToShow = 10 }: VisualizationProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function Visualization({ boxes, maxBoxesToShow = 20 }: VisualizationProps
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const displayBoxes = boxes.slice(0, maxBoxesToShow);
-    const boxSize = 100; // Fixed size for each box visualization
+    const boxSize = 200; // Fixed size for each box visualization
     const margin = 10;
     const padding = 20;
     const boxesPerRow = Math.floor((canvas.width - padding * 2) / (boxSize + margin));
@@ -41,19 +41,19 @@ export function Visualization({ boxes, maxBoxesToShow = 20 }: VisualizationProps
       // Draw box label
       ctx.fillStyle = '#374151';
       ctx.font = '12px sans-serif';
-      ctx.fillText(`Box ${box.id}`, x + 5, y + 15);
-
+      
       // Draw rectangles inside the box
       box.rectangles.forEach((rect) => {
-        if (rect.x !== undefined && rect.y !== undefined) {
+        const {x: xRect, y: yRect} = rect.position
+        if (xRect !== null && yRect !== null) {
           const scale = boxSize / box.size;
-          const rectX = x + rect.x * scale;
-          const rectY = y + rect.y * scale;
+          const rectX = x + xRect * scale;
+          const rectY = y + yRect * scale;
           const rectW = rect.width * scale;
           const rectH = rect.height * scale;
 
           // Fill rectangle with color
-          ctx.fillStyle = '#3b82f6';
+          ctx.fillStyle = rect.rotated ? '#f97316' : '#3b82f6';
           ctx.fillRect(rectX, rectY, rectW, rectH);
 
           // Draw rectangle border
@@ -64,7 +64,7 @@ export function Visualization({ boxes, maxBoxesToShow = 20 }: VisualizationProps
       });
 
       // Draw utilization percentage
-      ctx.fillStyle = '#6b7280';
+      ctx.fillStyle = 'red';
       ctx.font = '10px sans-serif';
       ctx.fillText(`${box.utilization.toFixed(1)}%`, x + 5, y + boxSize - 5);
     });
@@ -91,7 +91,7 @@ export function Visualization({ boxes, maxBoxesToShow = 20 }: VisualizationProps
           <canvas
             ref={canvasRef}
             width={1000}
-            height={600}
+            height={1000}
             className="w-full h-auto"
           />
         </div>

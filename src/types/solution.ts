@@ -1,22 +1,17 @@
-import type { Box } from "./box";
+import { Box } from "./box";
+import type { GreedyState } from "./greedy";
 
-export interface Solution {
-    copy(): Solution;
-    objective(): number;
-}
 
-export class PackingSolution implements Solution {
+
+export class PackingSolution implements GreedyState {
 
     readonly boxes: Box[];
 
-    constructor(boxes: Box[]) {
-        this.boxes = boxes;
+    constructor(boxSize: number) {
+        this.boxes = [new Box(boxSize)];
     }
-    copy(): PackingSolution {
-        return new PackingSolution(this.boxes);
-    }
-
-    objective(): number {
-        return this.boxes.length; 
+    
+    isComplete(): boolean {
+        return false;
     }
 }

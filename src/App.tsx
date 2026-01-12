@@ -10,15 +10,21 @@ import type {
 } from './types';
 import { InstanceGenerator, type InstanceParams } from './types/instance';
 import type { Box } from './types/box';
+import { GreedySolver } from './types/greedy';
+import { Rectangle } from './types/rectangle';
+import { LargestAreaFirst } from './types/greedy/ordering';
+import { FirstFitPlacer } from './types/greedy/extender';
+import { BottomLeftPutting } from './types/greedy/putting';
+import { PackingSolution } from './types/solution';
 
 function App() {
   const [instanceParams, setInstanceParams] = useState<InstanceParams>({
-    numRectangles: 200,
-    minWidth: 5,
-    maxWidth: 40,
-    minHeight: 5,
-    maxHeight: 30,
-    boxSize: 100,
+    numRectangles: 1000,
+    minWidth: 10,
+    maxWidth: 200,
+    minHeight: 20,
+    maxHeight: 300,
+    boxSize: 500,
   });
 
   const [algorithmParams, setAlgorithmParams] = useState<AlgorithmParams>({
@@ -41,14 +47,23 @@ function App() {
   const [isRunning, setIsRunning] = useState(false);
 
   const handleGenerateInstance = () => {
-    // TODO: Implement instance generation
-    console.log('Generating instance with params:', instanceParams);
+
     const instance = new InstanceGenerator().generate(instanceParams);
     console.log('Generated instance:', instance);
+
+    
+    const ordering = new LargestAreaFirst();
+    const placer = new FirstFitPlacer(instance.boxSize, new BottomLeftPutting());
+    
+    const solver = new GreedySolver<Rectangle, PackingSolution>(ordering, placer);
+    const initial = new PackingSolution(instance.boxSize);
+
+    const solution = solver.solve(initial, instance.rectangles);
+
+    setBoxes(solution.boxes);
     // Reset solution and metrics
-    setBoxes([]);
     setMetrics({
-      boxesUsed: 0,
+      boxesUsed: solution.boxes.length,
       iteration: 0,
       objective: 0,
       runtime: 0,
