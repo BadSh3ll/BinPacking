@@ -12,11 +12,11 @@ export default function InstanceProvider({
     children: React.ReactNode;
 }) {
     const [params, setParams] = useState<InstanceParams>({
-        numRectangles: 1000,
-        minWidth: 10,
-        maxWidth: 200,
-        minHeight: 20,
-        maxHeight: 300,
+        numRectangles: 5000,
+        minWidth: 20,
+        maxWidth: 300,
+        minHeight: 40,
+        maxHeight: 400,
         boxSize: 500,
     });
     const [instance, setInstance] = useState<PackingInstance | null>(null);

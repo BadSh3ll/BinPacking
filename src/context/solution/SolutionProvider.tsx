@@ -17,7 +17,7 @@ import {
 import { Rectangle } from "@/types/rectangle";
 import { PackingSolution } from "@/types/solution";
 import { LargestAreaFirst, LargestHeightFirst } from "@/types/greedy/ordering";
-import { FirstFitPlacer } from "@/types/greedy/extender";
+import { BestFitPlacer, FirstFitPlacer } from "@/types/greedy/extender";
 import {
     BottomLeftPutting,
     type PuttingStrategy,
@@ -25,21 +25,36 @@ import {
 
 const SolutionProvider = ({ children }: { children: ReactNode }) => {
     const [boxes, setBoxes] = useState<Box[]>([]);
+    const [runningTime, setRunningTime] = useState<number>(0);
+    const [isRunning, setIsRunning] = useState<boolean>(false);
 
     const { instance } = useInstance();
     const { params } = useAlgorithm();
 
     const RunAlgorithm = () => {
-        switch (params.type) {
-            case AlgorithmType.GREEDY:
-                RunGreedy();
-                break;
-            case AlgorithmType.LOCAL_SEARCH:
-                RunLocalSearch();
-                break;
-            default:
-                console.error("Invalid algorithm type");
-        }
+        if (isRunning) return;
+
+        setBoxes([]);
+        setRunningTime(0);
+        setIsRunning(true);
+
+        // just to ensure the reset state is visible
+        setTimeout(() => {
+            try {
+                switch (params.type) {
+                    case AlgorithmType.GREEDY:
+                        RunGreedy();
+                        break;
+                    case AlgorithmType.LOCAL_SEARCH:
+                        RunLocalSearch();
+                        break;
+                    default:
+                        console.error("Invalid algorithm type");
+                }
+            } finally {
+                setIsRunning(false);
+            }
+        }, 0);
     };
 
     const RunGreedy = () => {
@@ -47,6 +62,8 @@ const SolutionProvider = ({ children }: { children: ReactNode }) => {
             console.error("No instance provided");
             return;
         }
+
+        const startTime = new Date().getTime();
 
         let ordering: OrderingStrategy<Rectangle>;
 
@@ -74,7 +91,10 @@ const SolutionProvider = ({ children }: { children: ReactNode }) => {
 
         switch (params.greedy.strategy) {
             case GreedyStrategy.FIRST_FIT:
-                extender = new FirstFitPlacer(instance.boxSize, putting!);
+                extender = new FirstFitPlacer(instance.boxSize, putting);
+                break;
+            case GreedyStrategy.BEST_FIT:
+                extender = new BestFitPlacer(instance.boxSize, putting);
                 break;
             default:
                 throw new Error("Invalid extender type");
@@ -88,13 +108,18 @@ const SolutionProvider = ({ children }: { children: ReactNode }) => {
         const initial = new PackingSolution(instance.boxSize);
 
         const solution = solver.solve(initial, instance.rectangles);
+
+        const endTime = new Date().getTime();
+        setRunningTime(endTime - startTime);
         setBoxes(solution.boxes);
     };
 
     const RunLocalSearch = () => {};
 
     return (
-        <SolutionContext.Provider value={{ boxes, setBoxes, RunAlgorithm }}>
+        <SolutionContext.Provider
+            value={{ boxes, runningTime, isRunning, RunAlgorithm }}
+        >
             {children}
         </SolutionContext.Provider>
     );

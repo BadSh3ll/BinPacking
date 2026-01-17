@@ -1,32 +1,38 @@
 import type { Box } from "../box";
 import { Rectangle } from "../rectangle";
 
+export interface TryPutPosition {
+    x: number;
+    y: number;
+    rotated: boolean;
+}
+
 export interface PuttingStrategy {
-    tryPut(rectangle: Rectangle, box: Box): boolean;
+    tryPut(rectangle: Rectangle, box: Box): TryPutPosition | null;
 }
 
 export class BottomLeftPutting implements PuttingStrategy {
-    tryPut(rectangle: Rectangle, box: Box): boolean {
-        const posistions: { x: number; y: number }[] = [{ x: 0, y: 0 }];
+    tryPut(rectangle: Rectangle, box: Box): TryPutPosition | null {
+        const positions: { x: number; y: number }[] = [{ x: 0, y: 0 }];
 
         for (const rect of box.rectangles) {
             const { x, y } = rect.position;
-            posistions.push({ x: x! + rect.width, y: y! });
-            posistions.push({ x: x!, y: y! + rect.height });
+            positions.push({ x: x! + rect.width, y: y! });
+            positions.push({ x: x!, y: y! + rect.height });
         }
 
-        posistions.sort((a, b) => {
+        positions.sort((a, b) => {
             if (a.y === b.y) {
                 return a.x - b.x;
             }
             return a.y - b.y;
         });
 
-        const orientations = [rectangle, rectangle.rotate()];
+        const rotating = [false, true];
 
-        for (const rect of orientations) {
-            for (const { x, y } of posistions) {
-                const testRect = new Rectangle(rect.width, rect.height);
+        for (const rotated of rotating) {
+            for (const { x, y } of positions) {
+                const testRect = rotated ? rectangle.rotate() : rectangle;
                 testRect.position = { x, y };
 
                 let overlapping = false;
@@ -46,11 +52,10 @@ export class BottomLeftPutting implements PuttingStrategy {
                 }
 
                 if (!overlapping && !overflow) {
-                    box.addRect(rect, { x, y });
-                    return true;
+                    return { x, y, rotated };
                 }
             }
         }
-        return false;
+        return null;
     }
 }

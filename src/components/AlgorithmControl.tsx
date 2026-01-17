@@ -24,6 +24,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import useSolution from "@/context/solution/useSolution";
 import useInstance from "@/context/instance/useInstance";
+import { Spinner } from "./ui/spinner";
 
 export default function AlgorithmControl() {
     const {
@@ -33,7 +34,7 @@ export default function AlgorithmControl() {
 
     const { instance } = useInstance();
 
-    const { RunAlgorithm } = useSolution();
+    const { isRunning, RunAlgorithm } = useSolution();
 
     const renderAlgorithmControl = () => {
         switch (type) {
@@ -145,11 +146,19 @@ export default function AlgorithmControl() {
                 <div className="pt-2">
                     <Button
                         onClick={RunAlgorithm}
-                        disabled={!instance}
+                        disabled={!instance || isRunning}
                         className="w-full bg-linear-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-semibold py-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 group"
                     >
-                        <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                        Run Algorithm
+                        {!isRunning ? (
+                            <>
+                                <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                                Run Algorithm
+                            </>
+                        ) : (
+                            <>
+                                <Spinner />
+                            </>
+                        )}
                     </Button>
                 </div>
             </CardContent>

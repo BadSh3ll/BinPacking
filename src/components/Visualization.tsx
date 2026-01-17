@@ -6,8 +6,8 @@ import useSolution from "@/context/solution/useSolution";
 export default function Visualization() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    const { boxes } = useSolution();
-    const maxBoxesToShow = 10;
+    const { boxes, runningTime } = useSolution();
+    const maxBoxesToShow = 12;
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -87,7 +87,7 @@ export default function Visualization() {
             <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-foreground">
                     <BarChart3 className="size-5 text-orange-600 dark:text-orange-400" />
-                    Visualization
+                    Visualization {runningTime} ms
                 </CardTitle>
             </CardHeader>
             <CardContent>

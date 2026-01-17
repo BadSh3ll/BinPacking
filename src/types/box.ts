@@ -8,12 +8,20 @@ export class Box {
         return this.size * this.size;
     }
 
-    get utilization(): number {
+    get usedArea(): number {
         const totalArea = this.rectangles.reduce(
             (sum, rect) => sum + rect.area,
             0,
         );
-        return (totalArea / this.area) * 100;
+        return totalArea;
+    }
+
+    get freeArea(): number {
+        return this.area - this.usedArea;
+    }
+
+    get utilization(): number {
+        return (this.usedArea / this.area) * 100;
     }
 
     constructor(size: number) {

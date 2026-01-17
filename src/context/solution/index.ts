@@ -3,7 +3,8 @@ import { createContext } from "react";
 
 interface SolutionContextType {
     boxes: Box[];
-    setBoxes: React.Dispatch<React.SetStateAction<Box[]>>;
+    runningTime: number;
+    isRunning: boolean;
     RunAlgorithm: () => void;
 }
 
