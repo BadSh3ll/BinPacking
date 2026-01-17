@@ -2,11 +2,9 @@ import type { Rectangle } from "./rectangle";
 
 export class Box {
     readonly size: number;
-    rectangles: Rectangle[];
+    readonly area: number;
 
-    get area(): number {
-        return this.size * this.size;
-    }
+    rectangles: Rectangle[];
 
     get usedArea(): number {
         const totalArea = this.rectangles.reduce(
@@ -26,6 +24,7 @@ export class Box {
 
     constructor(size: number) {
         this.size = size;
+        this.area = size * size;
         this.rectangles = [];
     }
 

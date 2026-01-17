@@ -8,9 +8,9 @@ export enum AlgorithmType {
 // # GREEDY
 //
 export interface GreedyParams {
-    strategy?: GreedyStrategy;
-    selection?: SelectionStrategy;
-    putting?: PuttingStrategy;
+    strategy: GreedyStrategy;
+    selection: SelectionStrategy;
+    putting: PuttingStrategy;
 }
 
 export enum GreedyStrategy {
@@ -30,8 +30,8 @@ export enum PuttingStrategy {
 
 // # LOCAL SEARCH
 export interface LocalSearchParams {
-    neighborhood?: LocalSearchNeighborhood;
-    maxIterations?: number;
+    neighborhood: LocalSearchNeighborhood;
+    maxIterations: number;
 }
 
 export enum LocalSearchNeighborhood {

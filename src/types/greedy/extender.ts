@@ -54,10 +54,11 @@ export class BestFitPlacer implements GreedyExtender<
         let bestArea: number = Infinity;
         let bestPosition: TryPutPosition | null = null;
 
+        // Try to fit rectangle into existing boxes (tightest fit)
         for (const box of solution.boxes) {
             const position = this.putting.tryPut(rectangle, box);
             if (position !== null) {
-                const areaAfterPut = box.area + rectangle.area;
+                const areaAfterPut = box.area - (box.usedArea + rectangle.area);
                 if (areaAfterPut < bestArea) {
                     bestBox = box;
                     bestArea = areaAfterPut;
@@ -74,6 +75,7 @@ export class BestFitPlacer implements GreedyExtender<
             return solution;
         }
 
+        // Creating new box if no existing box can fit the rectangle
         const newBox = new Box(this.boxSize);
         newBox.addRect(rectangle, { x: 0, y: 0 });
         solution.boxes.push(newBox);

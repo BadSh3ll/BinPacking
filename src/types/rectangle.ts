@@ -3,9 +3,7 @@ import type { GreedyElement } from "./greedy";
 export class Rectangle implements GreedyElement {
     readonly width: number;
     readonly height: number;
-    get area(): number {
-        return this.width * this.height;
-    }
+    readonly area: number;
 
     // Position within the box
     private x: number | null = null;
@@ -24,6 +22,7 @@ export class Rectangle implements GreedyElement {
     constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
+        this.area = width * height;
     }
 
     rotate(): Rectangle {
