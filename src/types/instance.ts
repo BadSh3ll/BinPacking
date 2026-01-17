@@ -1,4 +1,3 @@
-import type { GreedyState } from "./greedy";
 import { Rectangle } from "./rectangle";
 
 export interface InstanceParams {
@@ -28,19 +27,12 @@ export class InstanceGenerator {
     }
 }
 
-export class PackingInstance implements GreedyState {
+export class PackingInstance {
     readonly boxSize: number;
     readonly rectangles: readonly Rectangle[];
 
     constructor(boxSize: number, rectangles: Rectangle[]) {
         this.boxSize = boxSize;
         this.rectangles = rectangles;
-    }
-
-    isComplete(): boolean {
-        return this.rectangles.every(
-            (rect) =>
-                rect.position.x !== undefined && rect.position.y !== undefined,
-        );
     }
 }
