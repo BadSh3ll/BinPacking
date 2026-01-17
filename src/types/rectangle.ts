@@ -1,33 +1,30 @@
 import type { GreedyElement } from "./greedy";
 
 export class Rectangle implements GreedyElement {
-
     readonly width: number;
     readonly height: number;
+    get area(): number {
+        return this.width * this.height;
+    }
 
     // Position within the box
     private x: number | null = null;
     private y: number | null = null;
     rotated: boolean = false;
-    
-    get position() {
-        return { x: this.x , y: this.y };
+
+    public get position() {
+        return { x: this.x, y: this.y };
     }
 
-    setPosition(x: number, y: number) {
+    public set position({ x, y }: { x: number | null; y: number | null }) {
         this.x = x;
         this.y = y;
     }
-    
-    get area(): number {
-        return this.width * this.height;
-    }
-    
+
     constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
     }
-
 
     rotate(): Rectangle {
         const rotatedRect = new Rectangle(this.height, this.width);

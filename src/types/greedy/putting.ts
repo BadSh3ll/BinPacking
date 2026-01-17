@@ -6,7 +6,6 @@ export interface PuttingStrategy {
 }
 
 export class BottomLeftPutting implements PuttingStrategy {
-
     tryPut(rectangle: Rectangle, box: Box): boolean {
         const posistions: { x: number; y: number }[] = [{ x: 0, y: 0 }];
 
@@ -26,17 +25,15 @@ export class BottomLeftPutting implements PuttingStrategy {
         const orientations = [rectangle, rectangle.rotate()];
 
         for (const rect of orientations) {
-
             for (const { x, y } of posistions) {
-
                 const testRect = new Rectangle(rect.width, rect.height);
-                testRect.setPosition(x, y);
+                testRect.position = { x, y };
 
                 let overlapping = false;
                 let overflow = false;
 
                 // Check overflow
-                if (x + rect.width > box.size || y + rect.height > box.size) {
+                if (box.isOverflowed(testRect)) {
                     overflow = true;
                 }
 
@@ -49,11 +46,9 @@ export class BottomLeftPutting implements PuttingStrategy {
                 }
 
                 if (!overlapping && !overflow) {
-                    box.addRect(rect);
-                    rect.setPosition(x, y);
+                    box.addRect(rect, { x, y });
                     return true;
                 }
-
             }
         }
         return false;

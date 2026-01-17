@@ -8,15 +8,14 @@ export interface OrderingStrategy<E extends GreedyElement> {
     order(elements: readonly E[]): readonly E[];
 }
 
-export interface GreedyExtender<E extends GreedyElement, S extends GreedyState> {
+export interface GreedyExtender<
+    E extends GreedyElement,
+    S extends GreedyState,
+> {
     extend(state: S, element: E): S;
 }
 
-export class GreedySolver<
-    E extends GreedyElement,
-    S extends GreedyState
-> {
-
+export class GreedySolver<E extends GreedyElement, S extends GreedyState> {
     ordering: OrderingStrategy<E>;
     extender: GreedyExtender<E, S>;
 
@@ -25,13 +24,9 @@ export class GreedySolver<
         this.extender = extender;
     }
 
-    solve(
-        initialState: S,
-        elements: readonly E[],
-    ): S {
-
+    solve(initialState: S, elements: readonly E[]): S {
         let state = initialState;
-        const orderedElements = this.ordering.order(elements); 
+        const orderedElements = this.ordering.order(elements);
         for (const element of orderedElements) {
             if (state.isComplete()) break;
             state = this.extender.extend(state, element);
@@ -40,6 +35,3 @@ export class GreedySolver<
         return state;
     }
 }
-
-
-
