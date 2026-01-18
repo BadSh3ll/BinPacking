@@ -12,7 +12,7 @@ export default function InstanceProvider({
     children: React.ReactNode;
 }) {
     const [params, setParams] = useState<InstanceParams>({
-        numRectangles: 5000,
+        numRectangles: 10000,
         minWidth: 20,
         maxWidth: 300,
         minHeight: 40,

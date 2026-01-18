@@ -2,7 +2,7 @@ import { GreedyStrategy, SelectionStrategy } from "@/context/algorithm";
 import type { GreedyExtender, OrderingStrategy } from ".";
 import type { Rectangle } from "../rectangle";
 import { LargestAreaFirst, LargestHeightFirst } from "./ordering";
-import { BottomLeftPutting, type PuttingStrategy } from "./putting";
+import { BottomLeftPutting, ShelfPutting, type PuttingStrategy } from "./putting";
 import { PuttingStrategy as PuttingStrategyParams } from "@/context/algorithm";
 import { BestFitPlacer, FirstFitPlacer } from "./extender";
 import type { PackingSolution } from "../solution";
@@ -24,6 +24,8 @@ export function getGreedyPutting(type: PuttingStrategyParams): PuttingStrategy {
     switch (type) {
         case PuttingStrategyParams.BOTTOM_LEFT:
             return new BottomLeftPutting();
+        case PuttingStrategyParams.SHELF:
+            return new ShelfPutting();
         default:
             throw new Error("Invalid putting type");
     }

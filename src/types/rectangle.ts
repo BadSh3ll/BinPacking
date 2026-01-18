@@ -25,6 +25,14 @@ export class Rectangle implements GreedyElement {
         this.area = width * height;
     }
 
+    get isSideway() {
+        return this.width >= this.height;
+    }
+
+    get isUpright() {
+        return this.width < this.height;
+    }
+
     rotate(): Rectangle {
         const rotatedRect = new Rectangle(this.height, this.width);
         rotatedRect.rotated = !this.rotated;

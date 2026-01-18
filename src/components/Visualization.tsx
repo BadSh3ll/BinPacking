@@ -7,7 +7,7 @@ export default function Visualization() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const { boxes, runningTime } = useSolution();
-    const maxBoxesToShow = 12;
+    const maxBoxesToShow = 16;
 
     useEffect(() => {
         const canvas = canvasRef.current;
